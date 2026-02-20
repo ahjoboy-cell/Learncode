@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import LeadList from './pages/LeadList';
@@ -9,7 +9,7 @@ export default function App() {
   const { leads, addOrUpdate, remove, refresh } = useLeads();
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route element={<Layout onRefresh={refresh} />}>
           <Route index element={<Dashboard leads={leads} />} />
@@ -18,6 +18,6 @@ export default function App() {
           <Route path="leads/:id" element={<LeadForm onSave={addOrUpdate} onDelete={remove} />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
