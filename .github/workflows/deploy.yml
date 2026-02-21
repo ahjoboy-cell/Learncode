@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ['claude/b2b-crm-dashboard-IRObA', 'main']
+    branches: ['claude/build-ai-agent-2dCmL', 'main']
 
 permissions:
   contents: read
