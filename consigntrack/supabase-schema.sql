@@ -125,6 +125,59 @@ create table audit_logs (
 );
 
 -- ============================================================
+-- PURCHASE ORDERS & VENDOR INVOICES
+-- ============================================================
+
+create table purchase_orders (
+  id uuid primary key default gen_random_uuid(),
+  po_number text not null unique,
+  vendor_id uuid not null references vendors(id) on delete cascade,
+  order_date date not null default current_date,
+  expected_delivery_date date,
+  status text not null default 'draft' check (status in ('draft', 'sent', 'acknowledged', 'shipped', 'received', 'cancelled')),
+  total_amount numeric(10,2) not null default 0,
+  notes text,
+  created_by uuid references team_members(id),
+  created_at timestamptz not null default now()
+);
+
+create table purchase_order_items (
+  id uuid primary key default gen_random_uuid(),
+  purchase_order_id uuid not null references purchase_orders(id) on delete cascade,
+  sku_id uuid not null references skus(id),
+  qty integer not null default 0,
+  unit_cost numeric(10,2) not null default 0,
+  line_total numeric(10,2) not null default 0,
+  received_qty integer not null default 0,
+  notes text
+);
+
+create table vendor_invoices (
+  id uuid primary key default gen_random_uuid(),
+  invoice_number text not null unique,
+  vendor_id uuid not null references vendors(id) on delete cascade,
+  purchase_order_id uuid references purchase_orders(id),
+  invoice_date date not null default current_date,
+  due_date date not null,
+  subtotal numeric(10,2) not null default 0,
+  tax_amount numeric(10,2) not null default 0,
+  total_amount numeric(10,2) not null default 0,
+  amount_paid numeric(10,2) not null default 0,
+  status text not null default 'pending' check (status in ('pending', 'approved', 'partially_paid', 'paid', 'overdue', 'cancelled')),
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+-- RLS for new tables
+alter table purchase_orders enable row level security;
+alter table purchase_order_items enable row level security;
+alter table vendor_invoices enable row level security;
+
+create policy "Allow all" on purchase_orders for all using (true) with check (true);
+create policy "Allow all" on purchase_order_items for all using (true) with check (true);
+create policy "Allow all" on vendor_invoices for all using (true) with check (true);
+
+-- ============================================================
 -- INDEXES
 -- ============================================================
 
@@ -147,6 +200,16 @@ create index idx_alerts_type on alerts(type);
 create index idx_alerts_resolved on alerts(resolved);
 create index idx_audit_logs_entity on audit_logs(entity_type, entity_id);
 create index idx_audit_logs_performed_by on audit_logs(performed_by);
+
+create index idx_purchase_orders_vendor on purchase_orders(vendor_id);
+create index idx_purchase_orders_status on purchase_orders(status);
+create index idx_purchase_orders_date on purchase_orders(order_date);
+create index idx_purchase_order_items_po on purchase_order_items(purchase_order_id);
+create index idx_purchase_order_items_sku on purchase_order_items(sku_id);
+create index idx_vendor_invoices_vendor on vendor_invoices(vendor_id);
+create index idx_vendor_invoices_po on vendor_invoices(purchase_order_id);
+create index idx_vendor_invoices_status on vendor_invoices(status);
+create index idx_vendor_invoices_due_date on vendor_invoices(due_date);
 
 -- ============================================================
 -- RLS DISABLED (using simple PIN auth, not Supabase auth)

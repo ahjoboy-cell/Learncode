@@ -16,6 +16,8 @@ import {
   Menu,
   X,
   Package,
+  FileText,
+  FileSpreadsheet,
 } from "lucide-react";
 
 const navItems = [
@@ -25,7 +27,9 @@ const navItems = [
   { href: "/stock-check", label: "Stock Check", icon: ClipboardCheck },
   { href: "/replenishment", label: "Replenishment", icon: PackagePlus },
   { href: "/settlements", label: "Settlements", icon: DollarSign },
-  { href: "/reports", label: "Reports", icon: BarChart3 },
+  { href: "/purchase-orders", label: "Purchase Orders", icon: FileText },
+  { href: "/vendor-invoices", label: "Vendor Invoices", icon: FileSpreadsheet },
+  { href: "/reports", label: "Reports & Data", icon: BarChart3 },
 ];
 
 export default function Sidebar() {

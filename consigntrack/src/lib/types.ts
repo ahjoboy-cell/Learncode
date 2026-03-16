@@ -111,3 +111,43 @@ export interface AuditLog {
   performed_by: string;
   created_at: string;
 }
+
+export interface PurchaseOrder {
+  id: string;
+  po_number: string;
+  vendor_id: string;
+  order_date: string;
+  expected_delivery_date: string;
+  status: "draft" | "sent" | "acknowledged" | "shipped" | "received" | "cancelled";
+  total_amount: number;
+  notes: string;
+  created_by: string;
+  created_at: string;
+}
+
+export interface PurchaseOrderItem {
+  id: string;
+  purchase_order_id: string;
+  sku_id: string;
+  qty: number;
+  unit_cost: number;
+  line_total: number;
+  received_qty: number;
+  notes: string;
+}
+
+export interface VendorInvoice {
+  id: string;
+  invoice_number: string;
+  vendor_id: string;
+  purchase_order_id: string | null;
+  invoice_date: string;
+  due_date: string;
+  subtotal: number;
+  tax_amount: number;
+  total_amount: number;
+  amount_paid: number;
+  status: "pending" | "approved" | "partially_paid" | "paid" | "overdue" | "cancelled";
+  notes: string;
+  created_at: string;
+}
