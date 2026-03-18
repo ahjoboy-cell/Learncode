@@ -5,7 +5,7 @@ import {
   AreaChart, Area, CartesianGrid,
 } from 'recharts';
 import { Users, DollarSign, TrendingUp, AlertTriangle, Target, ArrowUpRight, Clock } from 'lucide-react';
-import { STAGES, getStageColor, SOURCES } from '../utils/constants';
+import { STAGES, SOURCES } from '../utils/constants';
 import StatCard from '../components/StatCard';
 import { isPast, parseISO, differenceInDays } from 'date-fns';
 
@@ -230,7 +230,7 @@ export default function Dashboard({ leads }) {
                 <Cell key={i} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip formatter={(value, name) => [value, 'Leads']} />
+            <Tooltip formatter={(value) => [value, 'Leads']} />
           </PieChart>
         </ResponsiveContainer>
       </div>

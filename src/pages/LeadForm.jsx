@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { Save, Trash2 } from 'lucide-react';
@@ -21,20 +21,19 @@ export default function LeadForm({ onSave, onDelete }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
-  const [form, setForm] = useState(emptyLead);
-
-  useEffect(() => {
+  const [form, setForm] = useState(() => {
     if (id) {
       const lead = getLeads().find((l) => l.id === id);
       if (lead) {
-        setForm({
+        return {
           ...lead,
           dealValue: lead.dealValue?.toString() || '',
           followUpDate: lead.followUpDate || '',
-        });
+        };
       }
     }
-  }, [id]);
+    return emptyLead;
+  });
 
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
