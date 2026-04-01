@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutDashboard, Users, PlusCircle, Download, Upload } from 'lucide-react';
+import { LayoutDashboard, Users, PlusCircle, Download, Upload, Bot } from 'lucide-react';
 import { exportLeads, importLeads } from '../utils/storage';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/leads', icon: Users, label: 'Leads' },
   { to: '/leads/new', icon: PlusCircle, label: 'Add Lead' },
+  { to: '/trading-bot', icon: Bot, label: 'Bot' },
 ];
 
 export default function Layout({ onRefresh }) {
